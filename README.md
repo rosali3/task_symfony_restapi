@@ -25,7 +25,7 @@ Challenge: END THIS IN 11 DAYS. TILL APRIL, THE 14TH
 
 
 # План работы
-1. Начну с того, что создам абстрактный класс baseEntity (id, dateCreate, dateUpdate). Работаю с doctrine/hasLifeCycle и атрибутами onCreate, onUpdate 
+1. ~~Начну с того, что создам абстрактный класс baseEntity (id, dateCreate, dateUpdate). Работаю с doctrine/hasLifeCycle и атрибутами onCreate, onUpdate~~
 2. Создам сущности User и Image
 3. Круды по особым требованиям (пагинация для Get collection, сортировка и фильтрация, нормализация и денормализация)
 4. Авторизация

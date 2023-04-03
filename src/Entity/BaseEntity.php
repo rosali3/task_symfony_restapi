@@ -1,37 +1,59 @@
 <?php
 
 namespace App\Entity;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @method setUpdatedAt(\DateTime $param)
+ */
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
 
 abstract class BaseEntity
 {
-    /**
-     * @ORM\\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
-     */
-    private createdAt;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeInterface $updatedAt = null;
+
 
     /**
-     * @ORM\\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     * @param int|null $id
      */
-    private $dateUpdate;
-    protected \DateTime $lastUpdateDate;
-    private \DateTime $createDate;
-
-    /**
-     * @ORM\\PrePersist
-     */
-    public function setCreatedTimestamp(): void
+    public function setId(?int $id): void
     {
-        $this->dateCreate = new \DateTimeImmutable();
-        $this->dateUpdate = new \DateTimeImmutable();
+        $this->id = $id;
+    }
+
+
+    public function getCreatedAt($createdAt): ?\DateTimeInterface
+    {
+        return $this->$createdAt;
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
+    /**
+     * @param \DateTimeInterface|null $createdAt
+     */
+    public function setCreatedAt(?\DateTimeInterface $createdAt): void
     {
-        $this->createdAt = new \DateTimeImmutable();
+        $this->createdAt = $createdAt;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function updatedTimestamps(): void
+    {
+        $this->setUpdatedAt(new \DateTime('now'));
+        if (null === $this->getCreatedAt()) {
+            $this->setCreatedAt(new \DateTime('now'));
+        }
     }
 }
